@@ -2,6 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
 import { Toaster } from '@/components/ui/sonner'
+import ServiceWorkerRegistration from '@/components/ServiceWorkerRegistration'
 
 const poppins = Poppins({
 	subsets: ['latin'],
@@ -11,6 +12,10 @@ const poppins = Poppins({
 export const metadata: Metadata = {
 	title: "Commish",
 	description: "Commission management app",
+	icons: {
+		icon: '/favicon.ico',
+		apple: '/apple-touch-icon.png',
+	}
 };
 
 export default function RootLayout({ children, }: { children: React.ReactNode }) {
@@ -19,6 +24,7 @@ export default function RootLayout({ children, }: { children: React.ReactNode })
 			<body>
 				{children}
 				<Toaster />
+				<ServiceWorkerRegistration />
 			</body>
 		</html>
 	)
