@@ -50,6 +50,8 @@ pnpm install
 Create a `.env.local` file in the project root:
 
 ```env
+DISABLED_REGISTER=
+
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
 
