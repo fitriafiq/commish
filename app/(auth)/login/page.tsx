@@ -13,10 +13,12 @@ export default function LoginPage() {
 			<div className="text-center">
 				<h1 className="text-2xl font-bold text-gray-900 mb-3">Log in to Commish</h1>
 
-				<p className="text-sm text-gray-600">
-					Don't have an account?{" "}
-					<Link href="/register" className="font-semibold text-primary">Sign up</Link>.
-				</p>
+				{process.env.DISABLED_REGISTER !== 'true' &&
+					<p className="text-sm text-gray-600">
+						Don't have an account?{" "}
+						<Link href="/register" className="font-semibold text-primary">Sign up</Link>.
+					</p>
+				}
 			</div>
 
 			<div className="space-y-6 mt-8">

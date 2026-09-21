@@ -12,11 +12,3 @@ export const commissions = pgTable('commissions', {
 	createdAt: timestamp('created_at').defaultNow().notNull(),
 	updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
-
-export const userSettings = pgTable('user_settings', {
-	id: uuid('id').defaultRandom().primaryKey(),
-	userId: uuid('user_id').notNull(),
-	defaultCommisionRate: numeric('commission_rate', { precision: 5, scale: 2, }),
-	createdAt: timestamp('created_at').defaultNow().notNull(),
-	updatedAt: timestamp('updated_at').defaultNow().notNull(),
-})

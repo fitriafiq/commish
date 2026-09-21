@@ -1,8 +1,20 @@
-import { type NextRequest } from 'next/server'
+import { NextResponse, type NextRequest } from 'next/server'
 import { updateSession } from '@/lib/supabase/proxy'
 
 export async function proxy(request: NextRequest) {
-	return await updateSession(request)
+	const pathname = request.nextUrl.pathname
+
+	const isRegisterDisabled = process.env.DISABLED_REGISTER === 'true'
+	const isRegisterRoute = pathname === '/register'
+
+	if (isRegisterDisabled && isRegisterRoute) {
+		const url = request.nextUrl.clone()
+		url.pathname = '/login'
+
+		return NextResponse.redirect(url)
+	}
+
+	return updateSession(request)
 }
 
 export const config = {
