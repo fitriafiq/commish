@@ -24,6 +24,8 @@ export default function UpdatePasswordForm() {
 	useEffect(() => {
 		if (state?.error) {
 			toast.error(state.error)
+		} else if (state?.success) {
+			toast.success(state.success)
 		}
 	}, [state])
 
