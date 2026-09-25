@@ -6,6 +6,7 @@ import { CommissionForm } from '@/types/commission'
 import * as storageService from '@/services/storageService'
 import * as authService from '@/services/authService'
 import { revalidatePath } from 'next/cache'
+import { compressImage } from '@/lib/image'
 
 export async function createCommission(_previousState: ActionState, formData: FormData): Promise<ActionState> {
 	const user = await authService.getCurrentUser()
@@ -35,9 +36,19 @@ export async function createCommission(_previousState: ActionState, formData: Fo
 	let imageKey: string | undefined
 
 	if (image instanceof File && image.size > 0) {
+		const compressedImage = await compressImage(image)
+
+		const compressedFile = new File(
+			[compressedImage],
+			`${crypto.randomUUID()}.webp`,
+			{
+				type: 'image/webp',
+			}
+		)
+
 		imageKey = await storageService.uploadImage(
-			`commissions/${user.id}/${crypto.randomUUID()}-${image.name}`,
-			image
+			`commissions/${user.id}/${compressedFile.name}`,
+			compressedFile
 		)
 	}
 
