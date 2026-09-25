@@ -52,16 +52,17 @@ export async function createCommission(_previousState: ActionState, formData: Fo
 
 	try {
 		await commissionService.createCommission(user.id, data)
+		revalidatePath('/commissions')
+
+		return {
+			success: 'Commission created.'
+		}
 	} catch (error) {
 		console.error(error)
 
 		return {
 			error: 'Failed to create commission.',
 		}
-	}
-
-	return {
-		success: 'Commission created.'
 	}
 }
 
@@ -78,10 +79,14 @@ export async function deleteCommission(id: string) {
 		await commissionService.deleteCommission(user.id, id)
 		revalidatePath('/commissions')
 
-		return { success: 'Commission deleted.' }
+		return {
+			success: 'Commission deleted.'
+		}
 	} catch (error) {
 		console.error(error)
-		return { error: 'Failed to delete commission.' }
+		return {
+			error: 'Failed to delete commission.'
+		}
 	}
 }
 
@@ -142,6 +147,8 @@ export async function updateCommission(_previousState: ActionState, formData: Fo
 		if (currentImageKey && imageKey !== currentImageKey) {
 			await storageService.deleteImage(currentImageKey)
 		}
+
+		revalidatePath('/commissions')
 
 		return {
 			success: 'Commission updated.',
