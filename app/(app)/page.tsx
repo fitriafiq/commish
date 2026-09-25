@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { ArrowRight, Plus } from 'lucide-react'
 
-import { buttonVariants } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/server'
 import * as commissionService from '@/services/commissionService'
 import { Stat } from '@/types/stat'

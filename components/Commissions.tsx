@@ -1,11 +1,11 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Download } from 'lucide-react'
 
 import CommissionCard from '@/components/card/CommissionCard'
 import { Commission } from '@/types/commission'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Input } from '@/components/ui/input'
@@ -14,6 +14,7 @@ import StatCard from '@/components/card/StatCard'
 import { Package, Receipt, Wallet } from 'lucide-react'
 import { Stat } from '@/types/stat'
 import { calculateCommissionStats } from '@/lib/commission'
+import Link from 'next/link'
 
 export function Commissions({ commissions }: { commissions: Commission[] }) {
 	const [selectedDate, setSelectedDate] = useState(new Date())
@@ -21,6 +22,8 @@ export function Commissions({ commissions }: { commissions: Commission[] }) {
 
 	const selectedMonth = selectedDate.getMonth()
 	const selectedYear = selectedDate.getFullYear()
+
+	const month = selectedDate.toISOString().slice(0, 7)
 
 	const monthlyCommissions = useMemo(() => {
 		return commissions.filter((commission) => {
@@ -76,32 +79,42 @@ export function Commissions({ commissions }: { commissions: Commission[] }) {
 
 	return (
 		<div className="mt-6 space-y-4">
-			<div className="flex items-center gap-1">
-				<Button variant="outline" size="icon" onClick={() => changeMonth(-1)} aria-label="Previous month">
-					<ChevronLeft />
-				</Button>
+			<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+				<div className="flex items-center gap-1 w-full">
+					<Button variant="outline" size="icon" onClick={() => changeMonth(-1)} aria-label="Previous month">
+						<ChevronLeft />
+					</Button>
 
-				<Popover>
-					<PopoverTrigger className="h-9 w-full rounded-md border bg-gray-50 px-3 text-sm font-medium hover:bg-accent hover:text-accent-foreground">
-						{selectedDate.toLocaleDateString('en-MY', {
-							month: 'long',
-							year: 'numeric',
-						})}
-					</PopoverTrigger>
+					<Popover>
+						<PopoverTrigger className="h-9 w-full rounded-md border bg-gray-50 px-3 text-sm font-medium hover:bg-accent hover:text-accent-foreground">
+							{selectedDate.toLocaleDateString('en-MY', {
+								month: 'long',
+								year: 'numeric',
+							})}
+						</PopoverTrigger>
 
-					<PopoverContent className="w-auto p-0" align="center">
-						<Calendar mode="single" selected={selectedDate} defaultMonth={selectedDate}
-							onSelect={(date) => {
-								if (date) {
-									setSelectedDate(date)
-								}
-							}} />
-					</PopoverContent>
-				</Popover>
+						<PopoverContent className="w-auto p-0" align="center">
+							<Calendar mode="single" selected={selectedDate} defaultMonth={selectedDate}
+								onSelect={(date) => {
+									if (date) {
+										setSelectedDate(date)
+									}
+								}} />
+						</PopoverContent>
+					</Popover>
 
-				<Button variant="outline" size="icon" onClick={() => changeMonth(1)} aria-label="Next month">
-					<ChevronRight />
-				</Button>
+					<Button variant="outline" size="icon" onClick={() => changeMonth(1)} aria-label="Next month">
+						<ChevronRight />
+					</Button>
+				</div>
+
+				<Link href={`/api/commissions/pdf?month=${month}`} className={buttonVariants({
+						variant: 'default',
+						size: 'lg',
+					})}>
+						<Download />
+						Download
+				</Link>
 			</div>
 
 			<div className="mb-6 grid gap-3 sm:grid-cols-3">

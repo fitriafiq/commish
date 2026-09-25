@@ -1,6 +1,6 @@
 import { db } from '@/lib/db'
 import { commissions } from '@/lib/schema'
-import { eq, and } from 'drizzle-orm'
+import { eq, and, gte, lt } from 'drizzle-orm'
 import { Commission, CommissionForm } from '@/types/commission'
 import { deleteImage } from '@/services/storageService'
 
@@ -35,12 +35,31 @@ export async function getCommission(userId: string, id: string): Promise<Commiss
 	return commission
 }
 
-export async function getCommissions(userId: string): Promise<Commission[]> {
+export async function getCommissions(userId: string, month?: string): Promise<Commission[]> {
+	const conditions = [eq(commissions.userId, userId)]
+
+	if (month) {
+		const [year, monthNumber] = month.split('-').map(Number)
+
+		const startDate = `${year}-${String(monthNumber).padStart(2, '0')}-01`
+
+		const nextMonth = new Date(year, monthNumber, 1)
+
+		const endDate = `${nextMonth.getFullYear()}-${String(
+			nextMonth.getMonth() + 1
+		).padStart(2, '0')}-01`
+
+		conditions.push(
+			gte(commissions.date, startDate),
+			lt(commissions.date, endDate)
+		)
+	}
+
 	return await db
 		.select()
 		.from(commissions)
 		.where(
-			eq(commissions.userId, userId),
+			and(...conditions)
 		)
 }
 
