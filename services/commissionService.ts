@@ -43,11 +43,10 @@ export async function getCommissions(userId: string, month?: string): Promise<Co
 
 		const startDate = `${year}-${String(monthNumber).padStart(2, '0')}-01`
 
-		const nextMonth = new Date(year, monthNumber, 1)
+		const nextYear = monthNumber === 12 ? year + 1 : year
+		const nextMonthNumber = monthNumber === 12 ? 1 : monthNumber + 1
 
-		const endDate = `${nextMonth.getFullYear()}-${String(
-			nextMonth.getMonth() + 1
-		).padStart(2, '0')}-01`
+		const endDate = `${nextYear}-${String(nextMonthNumber).padStart(2, '0')}-01`
 
 		conditions.push(
 			gte(commissions.date, startDate),
