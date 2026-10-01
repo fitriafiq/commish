@@ -1,6 +1,6 @@
 import { db } from '@/lib/db'
 import { commissions } from '@/lib/schema'
-import { eq, and, gte, lt } from 'drizzle-orm'
+import { eq, and, gte, lt, desc } from 'drizzle-orm'
 import { Commission, CommissionForm } from '@/types/commission'
 import { deleteImage } from '@/services/storageService'
 
@@ -60,6 +60,9 @@ export async function getCommissions(userId: string, month?: string): Promise<Co
 		.from(commissions)
 		.where(
 			and(...conditions)
+		)
+		.orderBy(
+			desc(commissions.date)
 		)
 }
 
