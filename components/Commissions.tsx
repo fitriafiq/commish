@@ -23,7 +23,9 @@ export function Commissions({ commissions }: { commissions: Commission[] }) {
 	const selectedMonth = selectedDate.getMonth()
 	const selectedYear = selectedDate.getFullYear()
 
-	const month = selectedDate.toISOString().slice(0, 7)
+	const month = `${selectedDate.getFullYear()}-${String(
+		selectedDate.getMonth() + 1
+	).padStart(2, '0')}`
 
 	const monthlyCommissions = useMemo(() => {
 		return commissions.filter((commission) => {
@@ -109,11 +111,11 @@ export function Commissions({ commissions }: { commissions: Commission[] }) {
 				</div>
 
 				<Link href={`/api/commissions/pdf?month=${month}`} className={buttonVariants({
-						variant: 'default',
-						size: 'lg',
-					})}>
-						<Download />
-						Download
+					variant: 'default',
+					size: 'lg',
+				})}>
+					<Download />
+					Download
 				</Link>
 			</div>
 
