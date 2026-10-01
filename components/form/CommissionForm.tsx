@@ -20,7 +20,7 @@ export default function CommissionForm({ commission }: { commission?: Commission
 
 	const [form, setForm] = useState({
 		title: commission?.title || '',
-		date: commission?.date ? new Date(commission.date) : new Date(),
+		date: commission?.date ? parseDate(commission.date) : new Date(),
 		price: commission?.price || '',
 		commissionRate: commission?.commissionRate || '',
 		notes: commission?.notes || '',
@@ -38,6 +38,16 @@ export default function CommissionForm({ commission }: { commission?: Commission
 	const commissionAmount = form.price && form.commissionRate ?
 		((Number(form.price) * Number(form.commissionRate)) / 100).toFixed(2) :
 		'0.00'
+
+	function formatDateForInput(date: Date) {
+		return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+	}
+
+	function parseDate(date: string) {
+		const [year, month, day] = date.split('-').map(Number)
+
+		return new Date(year, month - 1, day)
+	}
 
 	return (
 		<Card className="mt-4">
@@ -70,7 +80,7 @@ export default function CommissionForm({ commission }: { commission?: Commission
 										}))
 									}} />
 
-									<input type="hidden" name="date" value={form.date.toISOString().split('T')[0]} />
+									<input type="hidden" name="date" value={formatDateForInput(form.date)} />
 								</FieldContent>
 							</Field>
 
